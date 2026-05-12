@@ -3,33 +3,29 @@ const express = require('express');
 //creating new server
 const app = express();
 
-const {adminAuth , userAuth} = require('./middlewares/admin');
 
-//using server
+app.get("/getUserData", (req,res,next) => {
+    try{
+        //Logic of DB and get user data
 
-// This will override all the below methods because it is starting with "/"
-/* app.use("/",(req,res) => {
-    res.send("Home page")
-}) */
+        throw new Error("jfjsfsj");
+        res.send("user data sent");
+    }catch(err){
+        res.status(500).send("Some error occured!");
+    }
+})
+
+//Wild card error handling 
+app.use("/user",(err,req,res,next) => {
+    throw new Error("jfjsfsj");
+
+    if(err){
+        res.status(500).send("something went wrong");
+    }
+    res.send("user details")
+})
 
 
-    //using dummy auth middleware
-    app.use('/admin', adminAuth);
-
-// This will override all the below /user methods because it is starting with "/"
-//auth middleware use for user
-app.use("/user" , userAuth , (req,res,next) => {
-    //save data to DB
-    res.send("user details");
-    //next(); // if we write next() after res.send it will give error on server console saying "Cannot set headers after they are sent to the client"
-    
-},
-(req,res,next) => {
-    //save data to DB
-    //res.send("user details 2");
-    next(); //It will throw error on postman as "Cannot GET /user" because we don't have any request handler here
-}
-)
 
 
 //listening on port 3000
